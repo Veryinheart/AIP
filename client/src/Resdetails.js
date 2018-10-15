@@ -23,10 +23,12 @@ class Resdetails extends Component {
         .then(response=>response.json())
         .then(responseJson => {
              console.log(responseJson)
+             var resDeatils = responseJson[0]
+             resDeatils.r_menu = resDeatils.r_menu.join(",")
              this.setState({
-            "resDetails": responseJson[0],
+            "resDetails": resDeatils,
         })
-
+             
         })
         
     }
@@ -42,9 +44,9 @@ class Resdetails extends Component {
       </div>
      <Media style={{background:'#eee'}}>
       <Media left href="#" className="col-md-3 col-sm-2 col-xs-2">
-        <Media object src={this.state.resDetails.r_pic}  style={{height:300,width:300}} alt="Generic placeholder image"  />
+        <Media object src={this.state.resDetails.r_pic}  style={{height:270,width:270}} alt="Generic placeholder image"  />
       </Media>
-      <Media body style={{float:'left'}} className="col-md-6 col-sm-2 col-xs-1">
+      <Media body style={{paddingLeft: 70}} className="col-md-6 col-sm-2 col-xs-1">
         <Media heading  >
             <div >
                 {this.state.resDetails.r_name}

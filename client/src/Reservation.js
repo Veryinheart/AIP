@@ -5,7 +5,7 @@ import Header from "./Header";
 export default class Reservation extends Component {
 constructor(props) {
         super(props);
-       
+        
         this.state = {
             "resname": "",
             "r_id" : this.props.match.params.rid,  // get the parameter of the selected restaurant and set to state 
@@ -13,6 +13,7 @@ constructor(props) {
             "time": "10:00", // set default time to the earliest reservation time
             "date": setDate(), //set default date to current date 
             "cusno": "1", // set default customer number to the least number 
+            "today" : setDate()
         };
     
     }
@@ -64,9 +65,12 @@ fetch('/reservation',{
         })
         .then(response=>response.json())
         .then(responseJson => {
-             
+             console.log(responseJson);
+
             if(responseJson.err_code === 0){
-                window.location.href="/Confirmation";
+               
+                  window.location.href="/Confirmation/"+responseJson.reserv_id;
+               
             }
             else if(responseJson.err_code === 1){
                 alert(responseJson.message);
@@ -133,7 +137,7 @@ render(){
         <FormGroup>
           <Label for="exampleDate">Date: <span style={{color:"red"}}>* </span></Label>
           <Input type="date" name="date" id="exampleDate" placeholder="date placeholder" style={{height:30,width:200}}
-              value={this.state.date} onChange={evt => this.setState({"date":evt.target.value})}/>  
+              value={this.state.date} onChange={evt => this.setState({"date":evt.target.value})} min={this.state.today}/>  
         </FormGroup>
 
         <FormGroup>

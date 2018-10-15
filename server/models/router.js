@@ -21,8 +21,9 @@ router.post('/sessionCheck',function (req,res) {
                 message: 'login success'
             })
         })
-    }
 
+    }
+    console.log(req.session.userInfo)
 })
 router.post('/clssession',function (req,res) {
     req.session.destroy(function(err) {
@@ -67,6 +68,7 @@ router.post('/login', function(req, res){
             }
               req.session.regenerate(function(err){
                     req.session.userInfo = user.username;
+                    req.session.userid = user._id;
                      //console.log(req.session)
                     res.status(200).json({
                         err_code: 0,
@@ -170,6 +172,7 @@ router.post('/reservation', function(req, res){
        // console.log("111111111")
         // get reservation request
         var reserv = new Reservation(req.body)
+        reserv.u_id = req.session.userid
         //console.log(reserv);
         //find the same time reservation
         Reservation.find({
@@ -197,7 +200,7 @@ router.post('/reservation', function(req, res){
                     reserv.save(); // save reservation information to database
                     res.status(200).json({
                         err_code: 0,
-
+                        "reserv_id" : reserv._id
                     })
                 } else { // if it reach max number
                     res.status(500).json({
@@ -209,7 +212,6 @@ router.post('/reservation', function(req, res){
 
         })
     }else{
-        //console.log("222222222")
         res.status(200).json({
             err_code: 2,
             message: 'please login'
@@ -220,7 +222,25 @@ router.post('/reservation', function(req, res){
    
 })
 
-
+router.get('/reservation/:id', function(req, res){
+    console.log(req.params.id)
+    Reservation.find({_id: req.params.id},function (err, result) {
+             
+            if (err) {
+                return res.status(500).json({
+                    err_code: 500,
+                    message: err.message
+                })
+            }
+            console.log(result)
+            var resver = {
+                'resname' : result[0].resname,
+                'email' : result[0].email
+            }
+            console.log(resver)
+            res.status(200).json(resver)
+    })
+})
 module.exports = router;
 
 

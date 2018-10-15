@@ -13,7 +13,7 @@ var reservSchema = new Schema({
   time: String,
   date: String,
   cusno: String,
-  email: String
+  email: String,
 })
 
 module.exports = mongoose.model('Reservation', reservSchema,"reserv_tab") 
